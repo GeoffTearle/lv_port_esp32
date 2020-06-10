@@ -27,15 +27,15 @@ menu "LittlevGL (LVGL) TFT Display controller"
             select LVGL_TFT_DISPLAY_PROTOCOL_SPI
             select LVGL_TFT_DISPLAY_MONOCHROME
             select LVGL_THEME_MONO
-	config LVGL_PREDEFINED_DISPLAY_ERTFT0356
-	    bool "ER-TFT035-6"
+	    config LVGL_PREDEFINED_DISPLAY_ERTFT0356
+	        bool "ER-TFT035-6"
             select LVGL_TFT_DISPLAY_CONTROLLER_ILI9488
             select LVGL_TFT_DISPLAY_PROTOCOL_SPI
-	config LVGL_PREDEFINED_DISPLAY_ADA_FEATHERWING
+	    config LVGL_PREDEFINED_DISPLAY_ADA_FEATHERWING
             bool "Adafruit 3.5 Featherwing"
             select LVGL_TFT_DISPLAY_CONTROLLER_HX8357
             select LVGL_TFT_DISPLAY_PROTOCOL_SPI
-  	config LVGL_PREDEFINED_DISPLAY_RPI_MPI3501
+  	    config LVGL_PREDEFINED_DISPLAY_RPI_MPI3501
             bool "RPi MPI3501"
             select LVGL_TFT_DISPLAY_CONTROLLER_ILI9486
             select LVGL_TFT_DISPLAY_PROTOCOL_SPI
@@ -45,6 +45,10 @@ menu "LittlevGL (LVGL) TFT Display controller"
             select LVGL_TFT_DISPLAY_PROTOCOL_I2C
             select LVGL_TFT_DISPLAY_MONOCHROME
             select LVGL_THEME_MONO
+  	    config LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND
+            bool "Lilygo TTGO T-Wristband"
+            select LVGL_TFT_DISPLAY_CONTROLLER_ST7735_GREENTAB160x80
+            select LVGL_TFT_DISPLAY_PROTOCOL_SPI
     endchoice
 
     # START of helper symbols.
@@ -72,6 +76,16 @@ menu "LittlevGL (LVGL) TFT Display controller"
         bool
         help
             ILI9486 display controller.
+
+    config LVGL_TFT_DISPLAY_CONTROLLER_ST7735
+        bool
+        help
+            ST7735 display controller.
+
+    config LVGL_TFT_DISPLAY_CONTROLLER_ST7735_GREENTAB160x80
+        bool
+        help
+            ST7735 display controller green tab, 160x80.
 
     config LVGL_TFT_DISPLAY_CONTROLLER_ST7789
         bool
@@ -161,6 +175,14 @@ menu "LittlevGL (LVGL) TFT Display controller"
 	    bool "ILI9488"
             select LVGL_TFT_DISPLAY_CONTROLLER_ILI9488
             select LVGL_TFT_DISPLAY_PROTOCOL_SPI
+	config LVGL_TFT_DISPLAY_USER_CONTROLLER_ST7735
+	    bool "ST7735"
+            select LVGL_TFT_DISPLAY_CONTROLLER_ST7735
+            select LVGL_TFT_DISPLAY_PROTOCOL_SPI
+	config LVGL_TFT_DISPLAY_USER_CONTROLLER_ST7735_GREENTAB160x80
+	    bool "ST7735 Greentab, 160x80"
+            select LVGL_TFT_DISPLAY_CONTROLLER_ST7735_GREENTAB160x80
+            select LVGL_TFT_DISPLAY_PROTOCOL_SPI
 	config LVGL_TFT_DISPLAY_USER_CONTROLLER_ST7789
 	    bool "ST7789"
             select LVGL_TFT_DISPLAY_CONTROLLER_ST7789
@@ -200,7 +222,7 @@ menu "LittlevGL (LVGL) TFT Display controller"
     choice
 		prompt "Display orientation" if LVGL_PREDEFINED_DISPLAY_M5STACK || LVGL_PREDEFINED_DISPLAY_M5STICK || \
             LVGL_PREDEFINED_DISPLAY_WEMOS_LOLIN || LVGL_PREDEFINED_DISPLAY_WROVER4 || \
-            LVGL_PREDEFINED_DISPLAY_RPI_MPI3501 || \
+            LVGL_PREDEFINED_DISPLAY_RPI_MPI3501 || LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND || \
             LVGL_TFT_DISPLAY_CONTROLLER_ILI9341 || LVGL_TFT_DISPLAY_CONTROLLER_SH1107 || \
             LVGL_TFT_DISPLAY_CONTROLLER_ILI9486 || LVGL_TFT_DISPLAY_CONTROLLER_SSD1306 || \
             LVGL_TFT_DISPLAY_CONTROLLER_ILI9488 || LVGL_TFT_DISPLAY_CONTROLLER_FT81X
@@ -226,6 +248,8 @@ menu "LittlevGL (LVGL) TFT Display controller"
 	    default 480 if LVGL_PREDEFINED_DISPLAY_ERTFT0356 || LVGL_PREDEFINED_DISPLAY_ADA_FEATHERWING
         default 64 if ( LVGL_PREDEFINED_DISPLAY_WEMOS_LOLIN || LVGL_PREDEFINED_DISPLAY_M5STICK ) && LVGL_DISPLAY_ORIENTATION_PORTRAIT
         default 128 if ( LVGL_PREDEFINED_DISPLAY_WEMOS_LOLIN || LVGL_PREDEFINED_DISPLAY_M5STICK ) && LVGL_DISPLAY_ORIENTATION_LANDSCAPE
+        default 160 if( LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND ) && LVGL_DISPLAY_ORIENTATION_LANDSCAPE
+        default 80 if( LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND ) && LVGL_DISPLAY_ORIENTATION_PORTRAIT
 		default 800 if LVGL_TFT_DISPLAY_CONTROLLER_FT81X
 	    default 320
 
@@ -236,6 +260,8 @@ menu "LittlevGL (LVGL) TFT Display controller"
 	    default 320 if LVGL_PREDEFINED_DISPLAY_ERTFT0356 || LVGL_PREDEFINED_DISPLAY_ADA_FEATHERWING
         default 128 if ( LVGL_PREDEFINED_DISPLAY_WEMOS_LOLIN || LVGL_PREDEFINED_DISPLAY_M5STICK ) && LVGL_DISPLAY_ORIENTATION_PORTRAIT
         default 64 if ( LVGL_PREDEFINED_DISPLAY_WEMOS_LOLIN || LVGL_PREDEFINED_DISPLAY_M5STICK ) && LVGL_DISPLAY_ORIENTATION_LANDSCAPE
+        default 80 if( LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND ) && LVGL_DISPLAY_ORIENTATION_LANDSCAPE
+        default 160 if( LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND ) && LVGL_DISPLAY_ORIENTATION_PORTRAIT
 		default 480 if LVGL_TFT_DISPLAY_CONTROLLER_FT81X
         default 240
 
@@ -246,8 +272,9 @@ menu "LittlevGL (LVGL) TFT Display controller"
             If text is backwards on your display, try enabling this.
     
     config LVGL_INVERT_COLORS
-        bool "Invert colors in display" if LVGL_TFT_DISPLAY_CONTROLLER_ILI9341
+        bool "Invert colors in display" if LVGL_TFT_DISPLAY_CONTROLLER_ILI9341 || LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND
         default y if LVGL_PREDEFINED_DISPLAY_M5STACK
+        default y if LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND
         help
             If the colors look inverted on your display, try enabling this.
 
@@ -258,6 +285,7 @@ menu "LittlevGL (LVGL) TFT Display controller"
         default y if LVGL_PREDEFINED_DISPLAY_M5STACK
         default y if LVGL_PREDEFINED_DISPLAY_WROVER4
         default y if LVGL_PREDEFINED_DISPLAY_ERTFT0356
+        default y if LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND
         help
             Enable controlling the display backlight using an GPIO
 
@@ -267,6 +295,7 @@ menu "LittlevGL (LVGL) TFT Display controller"
             || LVGL_PREDEFINED_DISPLAY_RPI_MPI3501
         default y if LVGL_PREDEFINED_DISPLAY_M5STACK
         default y if LVGL_PREDEFINED_DISPLAY_ERTFT0356
+        default y if LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND
         help
             Some backlights are turned on with a high signal, others held low.
             If enabled, a value of 1 will be sent to the display to enable the backlight,
@@ -283,6 +312,7 @@ menu "LittlevGL (LVGL) TFT Display controller"
             default 23 if LVGL_PREDEFINED_DISPLAY_M5STACK || LVGL_PREDEFINED_DISPLAY_M5STICK
             default 18 if LVGL_PREDEFINED_DISPLAY_ADA_FEATHERWING
 		    default 23 if LVGL_PREDEFINED_PINS_TKOALA
+		    default 19 if LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND
             default 13
 
             help
@@ -292,6 +322,7 @@ menu "LittlevGL (LVGL) TFT Display controller"
              int "GPIO for MISO (Master In Slave Out)"
              range 0 39
              default 19 if LVGL_PREDEFINED_PINS_TKOALA
+             default 0 if LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND
              default 0
 
          help
@@ -304,6 +335,7 @@ menu "LittlevGL (LVGL) TFT Display controller"
             default 19 if LVGL_PREDEFINED_DISPLAY_WROVER4
             default 5 if LVGL_PREDEFINED_DISPLAY_ADA_FEATHERWING
             default 18 if LVGL_PREDEFINED_PINS_TKOALA
+            default 18 if LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND
             default 14
 
             help
@@ -317,6 +349,7 @@ menu "LittlevGL (LVGL) TFT Display controller"
             default 22 if LVGL_PREDEFINED_DISPLAY_WROVER4
             default 15 if LVGL_PREDEFINED_DISPLAY_ADA_FEATHERWING
             default 5  if LVGL_PREDEFINED_PINS_TKOALA
+            default 5 if LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND
             default 15
 
             help
@@ -331,6 +364,7 @@ menu "LittlevGL (LVGL) TFT Display controller"
             default 21 if LVGL_PREDEFINED_DISPLAY_WROVER4
             default 33 if LVGL_PREDEFINED_DISPLAY_ADA_FEATHERWING
             default 0  if LVGL_PREDEFINED_PINS_TKOALA
+            default 23 if LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND
             default 2
 
             help
@@ -345,6 +379,7 @@ menu "LittlevGL (LVGL) TFT Display controller"
             default 18 if LVGL_PREDEFINED_DISPLAY_WROVER4
             default 4 if LVGL_PREDEFINED_DISPLAY_ADA_FEATHERWING
             default 15 if LVGL_PREDEFINED_PINS_TKOALA
+            default 26 if LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND
             default 4
 
             help
@@ -360,6 +395,7 @@ menu "LittlevGL (LVGL) TFT Display controller"
             default 2 if LVGL_PREDEFINED_DISPLAY_ADA_FEATHERWING
             default 27 if LVGL_PREDEFINED_DISPLAY_ERTFT0356
             default 0  if LVGL_PREDEFINED_PINS_TKOALA
+            default 27 if LVGL_PREDEFINED_DISPLAY_TTGO_TWRISTBAND
             default 27
 
             help
